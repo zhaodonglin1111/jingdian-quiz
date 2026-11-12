@@ -392,9 +392,18 @@ window.addEventListener("error", function(e){
   const MAX_PICK = 2;                 // 每题最多选几项（每题仅 3 个维度，设 2 才有区分度）；改成 99 即放开
   const WEIGHTS  = [2,2,2,1,1,1,1,1,1,1]; // 前 3 题权重 ×2
   const BALANCED_GAP = 2;             // 最高分与最低分差 ≤ 此值 → 判定为「三者均衡」
-  /* 提交地址：Cloudflare Worker（部署后把地址填到这里）。
-     留空则跳过上传，只在本地生成结果，不影响答题。 */
-  const SUBMIT_URL = "http://47.116.48.54/api/submit";
+  /* ==================== 提交地址 ====================
+     两种部署方式共用同一份代码：
+
+     1) 打在 GitHub Pages 上时，页面不在自己服务器上，
+        同源的 /api/submit 会打到 GitHub 去，所以必须走绝对地址。
+     2) 打在阿里云隧道 / 自有服务器上时，同源相对路径最简单，
+        http、https、换端口、以后换域名，都不用改代码。
+
+     规则：页面域名是 github.io 时用 REMOTE_URL，其余用相对路径。
+     ================================================== */
+  const REMOTE_URL = "https://rows-genes-define-coat.trycloudflare.com/api/submit";
+  const SUBMIT_URL = /\.github\.io$/i.test(location.hostname) ? REMOTE_URL : "/api/submit";
 
   /* ==================== 题目数据 ==================== */
   const QUESTIONS = [
@@ -723,44 +732,66 @@ window.addEventListener("error", function(e){
     return k;
   }
 
-  /* ==================== 上传到飞书 ==================== */
-  /* 只上传「谁 + 侧重 + 三项档位 + 时间」，不上传具体选项，
-     尽量少留痕。失败不影响作答，只在结果页角落给个温和提示。 */
+  /* ==================== 提交到自己的服务器 ==================== */
+  /* 提交「谁 + 侧重 + 三项档位 + 逐题选择」。
+     逐题选择用于后台做痛点分布，是判断课程方向最重要的数据。
+     失败不影响作答，只在结果页角落给个温和提示。 */
+  let attemptId = "";      // 每次答题一个 id，防刷新重复计数
+  let submitted = false;   // 本轮是否已提交
+
+  function newAttemptId(){
+    try{
+      return "a" + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+    }catch(e){ return ""; }
+  }
+
   function submitRecord(s, R){
-    if(!SUBMIT_URL) return;
-    /* https 页面不允许请求 http 接口（浏览器会直接拦截），
-       这时静默跳过，不影响答题与结果展示。 */
-    if(location.protocol === "https:" && SUBMIT_URL.indexOf("http://") === 0) return;
+    if(submitted || !userName) return;
+    submitted = true;
+
     const max = Math.max(s.yi, s.dao, s.xin, 1);
+    const detail = QUESTIONS.map(function(q, i){
+      const picked = answers[i] || [];
+      return {
+        t: q.tag,
+        d: picked.slice(),
+        s: picked.map(function(d){
+          const hit = q.opts.filter(function(o){ return o.d === d; })[0];
+          return hit ? hit.t.slice(0, 60) : "";
+        })
+      };
+    });
+
     const payload = {
       name: userName,
       tag: R.tag,
       yi:  weightWord(s.yi, max),
       dao: weightWord(s.dao, max),
       xin: weightWord(s.xin, max),
-      from: /MicroMessenger/i.test(navigator.userAgent) ? "微信" : "其他"
+      scores: { yi: s.yi, dao: s.dao, xin: s.xin },
+      answers: answers.map(function(list){ return list.slice(); }),
+      detail: detail,
+      from: /MicroMessenger/i.test(navigator.userAgent) ? "微信" : "其他",
+      // 只在本地留一个粗略指纹，不采集个人身份信息
+      ua: (navigator.platform || "") + " / " + (navigator.language || ""),
+      client_id: attemptId
     };
+
     const done = function(ok){
       const el = $("submitState");
       if(!el) return;
       el.textContent = ok ? "结果已记录" : "";
       el.style.display = ok ? "block" : "none";
+      if(!ok) submitted = false;   // 失败留一线，允许用户点重测再交一次
     };
+
     try{
-      if(navigator.sendBeacon){
-        const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
-        // sendBeacon 拿不到返回值，按发出即算成功
-        const sent = navigator.sendBeacon(SUBMIT_URL, blob);
-        done(!!sent);
-        return;
-      }
       fetch(SUBMIT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
         keepalive: true
-      }).then(function(r){ return r.json(); })
-        .then(function(d){ done(!!(d && d.ok)); })
+      }).then(function(r){ done(r.ok); })
         .catch(function(){ done(false); });
     }catch(e){ done(false); }
   }
@@ -829,6 +860,8 @@ window.addEventListener("error", function(e){
     answers = QUESTIONS.map(function(){ return []; });
     QUESTIONS.forEach(function(q){ delete q._order; });
     clearSave();
+    attemptId = newAttemptId();
+    submitted = false;
     renderQuestion();
     show("quiz");
   });
@@ -844,6 +877,8 @@ window.addEventListener("error", function(e){
     answers = QUESTIONS.map(function(_,i){ return Array.isArray(o.a[i]) ? o.a[i] : []; });
     idx = Math.min(o.i || 0, QUESTIONS.length - 1);
     if(o.n && !userName){ userName = cleanName(o.n); saveName(userName); }
+    attemptId = attemptId || newAttemptId();
+    submitted = false;
     renderQuestion();
     show("quiz");
   });
@@ -869,6 +904,8 @@ window.addEventListener("error", function(e){
     idx = 0;
     answers = QUESTIONS.map(function(){ return []; });
     QUESTIONS.forEach(function(q){ delete q._order; });
+    attemptId = "";
+    submitted = false;
     show("cover");
     $("resumeBtn").style.display = "none";
     // 姓名保留在输入框里，方便同一个人重测；换人再改即可
