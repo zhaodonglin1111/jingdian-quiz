@@ -61,6 +61,34 @@
   }
   h1 .thin{color:var(--ink-3);font-weight:400;}
   .lede{font-size:16px;color:var(--ink-2);margin:0 0 30px;max-width:26em;}
+  /* ============ 姓名输入 ============ */
+  .namewrap{margin:0 0 26px;max-width:26em;}
+  .namewrap label{
+    display:block;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12.5px;letter-spacing:.16em;color:var(--ink-3);
+    margin-bottom:8px;font-weight:600;
+  }
+  .namewrap input{
+    width:100%;box-sizing:border-box;
+    padding:14px 16px;
+    font-family:inherit;font-size:17px;color:var(--ink);
+    background:#fffdf8;
+    border:1px solid var(--line);border-radius:12px;
+    outline:none;transition:border-color .2s,box-shadow .2s;
+    -webkit-appearance:none;appearance:none;
+  }
+  .namewrap input::placeholder{color:#b8ae9c;font-size:15.5px;}
+  .namewrap input:focus{
+    border-color:var(--seal);
+    box-shadow:0 0 0 3px rgba(168,69,44,.10);
+  }
+  .namewrap input.err{border-color:var(--seal);background:#fdf6f3;}
+  .name-tip{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12px;color:var(--ink-3);margin-top:8px;line-height:1.7;
+  }
+
   .meta{
     display:flex;gap:22px;flex-wrap:wrap;
     font-family:"PingFang SC","Microsoft YaHei",sans-serif;
@@ -141,6 +169,18 @@
 
   /* ============ 结果 ============ */
   #result{padding-top:26px;}
+  .name-line{
+    display:none;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:15px;color:var(--ink-2);
+    letter-spacing:.02em;margin:0 0 14px;
+  }
+  .submit-state{
+    display:none;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12px;color:var(--ink-3);
+    text-align:center;margin-top:14px;
+  }
   .res-tag{
     display:inline-block;
     font-family:"PingFang SC","Microsoft YaHei",sans-serif;
@@ -155,6 +195,11 @@
   .scorecard{
     background:#fffdf8;border:1px solid var(--line);border-radius:16px;
     padding:22px 20px;margin-bottom:32px;box-shadow:var(--shadow);
+  }
+  .sc-hint{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12px;letter-spacing:.1em;color:var(--ink-3);
+    margin:-4px 0 18px;
   }
   .sc-row{margin-bottom:16px;}
   .sc-row:last-child{margin-bottom:0;}
@@ -196,17 +241,6 @@
   }
   .blind b{color:var(--ink);}
 
-  .action{
-    background:var(--ink);color:#f6f1e7;border-radius:16px;
-    padding:24px 22px;box-shadow:0 18px 40px -24px rgba(35,32,28,.85);
-  }
-  .action .label{
-    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
-    font-size:11px;letter-spacing:.28em;color:#b3a894;margin-bottom:10px;
-  }
-  .action .task{font-size:18px;font-weight:700;line-height:1.6;margin-bottom:10px;}
-  .action .why{font-size:14px;color:#c9bfae;line-height:1.8;margin:0;}
-
   .course{
     border:1px solid var(--line);border-radius:16px;overflow:hidden;
     background:#fffdf8;margin-bottom:26px;
@@ -219,7 +253,6 @@
   .course-b{padding:10px 20px 20px;}
   .course-t{font-size:19px;font-weight:700;margin:0 0 8px;}
   .course-d{font-size:14.5px;color:var(--ink-2);line-height:1.8;margin:0;}
-  .course a.btn{margin-top:16px;display:flex;text-decoration:none;}
 
   .footnote{
     font-family:"PingFang SC","Microsoft YaHei",sans-serif;
@@ -244,6 +277,14 @@
     <div class="cover-seal">经</div>
     <h1>此刻的你，<br>更适合从哪一门入？</h1>
     <p class="lede">易经看势，道德经知止，阳明心学定心。十道题，看清你当下最该先把力气放在哪一层。</p>
+
+    <div class="namewrap">
+      <label for="nameInput">您的姓名</label>
+      <input id="nameInput" type="text" inputmode="text" autocomplete="name"
+             maxlength="20" placeholder="请填写，方便我们回访与记名">
+      <div class="name-tip" id="nameTip">仅用于本次工作坊的签到与回访，不会对外公开。</div>
+    </div>
+
     <div class="meta">
       <span><b>10</b> 道题</span>
       <span>约 <b>3</b> 分钟</span>
@@ -276,11 +317,13 @@
 
   <!-- ================= 结果 ================= -->
   <section id="result" class="screen">
+    <div class="name-line" id="nameLine"></div>
     <div class="res-tag" id="resTag"></div>
     <h2 class="res-title" id="resTitle"></h2>
     <p class="res-sub" id="resSub"></p>
 
     <div class="scorecard">
+      <div class="sc-hint">条越长，越该先学</div>
       <div class="sc-row" data-k="yi">
         <div class="sc-head"><span class="sc-name">易经 <i>观势</i></span><span class="sc-val" id="vYi">0</span></div>
         <div class="sc-track"><div class="sc-bar" id="bYi"></div></div>
@@ -293,8 +336,7 @@
         <div class="sc-head"><span class="sc-name">阳明心学 <i>定心</i></span><span class="sc-val" id="vXin">0</span></div>
         <div class="sc-track"><div class="sc-bar" id="bXin"></div></div>
       </div>
-      <div class="sc-note">这不是考试分数。<br>条越长，只说明这类课题在你当下更常出现、更值得多花些心思。</div>
-    </div>
+      </div>
 
     <div class="sec" id="secProfile">
       <div class="sec-h">你此刻的样子</div>
@@ -306,21 +348,11 @@
       <div class="blind" id="blindBody"></div>
     </div>
 
-    <div class="sec">
-      <div class="sec-h">这一周，先做一件事</div>
-      <div class="action">
-        <div class="label">THIS WEEK</div>
-        <div class="task" id="taskBody"></div>
-        <p class="why" id="whyBody"></p>
-      </div>
-    </div>
-
     <div class="course">
       <div class="course-h">下一程，从这里开始</div>
       <div class="course-b">
         <div class="course-t" id="courseTitle"></div>
         <p class="course-d" id="courseBody"></p>
-        <a class="btn seal" id="courseBtn" href="#">查看课程安排</a>
       </div>
     </div>
 
@@ -333,6 +365,7 @@
 
     <button class="btn ghost" id="againBtn" style="margin-top:26px">重新测一次</button>
     <button class="btn ghost" id="copyBtn">复制文字版结果</button>
+    <div class="submit-state" id="submitState"></div>
   </section>
 
 </div>
@@ -347,7 +380,9 @@
   const MAX_PICK = 2;                 // 每题最多选几项（每题仅 3 个维度，设 2 才有区分度）；改成 99 即放开
   const WEIGHTS  = [2,2,2,1,1,1,1,1,1,1]; // 前 3 题权重 ×2
   const BALANCED_GAP = 2;             // 最高分与最低分差 ≤ 此值 → 判定为「三者均衡」
-  const COURSE_URL = "#";             // ← 换成你的课程/落地页链接
+  /* 提交地址：Cloudflare Worker（部署后把地址填到这里）。
+     留空则跳过上传，只在本地生成结果，不影响答题。 */
+  const SUBMIT_URL = "";
 
   /* ==================== 题目数据 ==================== */
   const QUESTIONS = [
@@ -516,9 +551,11 @@
 
   /* ==================== 状态 ==================== */
   const STORE_KEY = "jingdian_quiz_v1";
+  const NAME_KEY  = "jingdian_quiz_name";
   let idx = 0;
   let answers = QUESTIONS.map(function(){ return []; }); // 每题存维度数组
   let order = [];  // 当前题的选项渲染顺序
+  let userName = "";  // 封面填写的姓名
 
   const $ = function(id){ return document.getElementById(id); };
   const screens = { cover:$("cover"), quiz:$("quiz"), result:$("result") };
@@ -610,7 +647,7 @@
   }
 
   function save(){
-    try{ localStorage.setItem(STORE_KEY, JSON.stringify({ a:answers, i:idx })); }catch(e){}
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify({ a:answers, i:idx, n:userName })); }catch(e){}
   }
   function load(){
     try{
@@ -623,6 +660,26 @@
   }
   function clearSave(){
     try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  }
+
+  /* ==================== 姓名 ==================== */
+  function cleanName(v){
+    // 去首尾空白、压缩中间空格、去掉尖括号等无意义字符
+    return String(v || "").replace(/[<>]/g, "").replace(/\s+/g, " ").trim();
+  }
+  function saveName(v){
+    userName = cleanName(v);
+    try{ localStorage.setItem(NAME_KEY, userName); }catch(e){}
+  }
+  function loadName(){
+    try{ return cleanName(localStorage.getItem(NAME_KEY) || ""); }catch(e){ return ""; }
+  }
+  /* 结果页顶部的称呼行 */
+  function renderNameLine(){
+    const el = $("nameLine");
+    if(!el) return;
+    el.textContent = userName ? (userName + "，以下是你的结果") : "";
+    el.style.display = userName ? "block" : "none";
   }
 
   /* ==================== 计分 ==================== */
@@ -654,15 +711,54 @@
     return k;
   }
 
+  /* ==================== 上传到飞书 ==================== */
+  /* 只上传「谁 + 侧重 + 三项档位 + 时间」，不上传具体选项，
+     尽量少留痕。失败不影响作答，只在结果页角落给个温和提示。 */
+  function submitRecord(s, R){
+    if(!SUBMIT_URL) return;
+    const max = Math.max(s.yi, s.dao, s.xin, 1);
+    const payload = {
+      name: userName,
+      tag: R.tag,
+      yi:  weightWord(s.yi, max),
+      dao: weightWord(s.dao, max),
+      xin: weightWord(s.xin, max),
+      from: /MicroMessenger/i.test(navigator.userAgent) ? "微信" : "其他"
+    };
+    const done = function(ok){
+      const el = $("submitState");
+      if(!el) return;
+      el.textContent = ok ? "结果已记录" : "";
+      el.style.display = ok ? "block" : "none";
+    };
+    try{
+      if(navigator.sendBeacon){
+        const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+        // sendBeacon 拿不到返回值，按发出即算成功
+        const sent = navigator.sendBeacon(SUBMIT_URL, blob);
+        done(!!sent);
+        return;
+      }
+      fetch(SUBMIT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        keepalive: true
+      }).then(function(r){ return r.json(); })
+        .then(function(d){ done(!!(d && d.ok)); })
+        .catch(function(){ done(false); });
+    }catch(e){ done(false); }
+  }
+
   /* ==================== 结果渲染 ==================== */
   /* 把原始分值翻成「侧重程度」的词，避免读成考试成绩 */
   function weightWord(v, max){
-    if(v <= 0) return "较少遇上";
+    if(v <= 0) return "先放一放";
     const r = v / max;
-    if(r >= 0.95) return "最常遇上";
-    if(r >= 0.7)  return "常常遇上";
-    if(r >= 0.45) return "偶尔遇上";
-    return "较少遇上";
+    if(r >= 0.95) return "优先学";
+    if(r >= 0.7)  return "接着学";
+    if(r >= 0.45) return "可以缓一缓";
+    return "先放一放";
   }
 
   function renderResult(){
@@ -670,17 +766,15 @@
     const key = normalizeKey(decide(s));
     const R = RESULTS[key] || RESULTS.balanced;
 
+    renderNameLine();
     $("resTag").textContent = R.tag;
     $("resTitle").innerHTML = R.title;
     $("resSub").textContent = R.sub;
 
     $("profileBody").innerHTML = R.profile.map(function(p){ return "<p>" + p + "</p>"; }).join("");
     $("blindBody").innerHTML = R.blind;
-    $("taskBody").innerHTML = R.task;
-    $("whyBody").innerHTML = R.why;
     $("courseTitle").textContent = R.courseTitle;
     $("courseBody").textContent = R.courseBody;
-    $("courseBtn").href = COURSE_URL;
 
     // 分数条：不显示绝对分，改为「相对侧重」——只说这类课题在你当下出现的多少
     const max = Math.max(s.yi, s.dao, s.xin, 1);
@@ -698,10 +792,24 @@
     });
 
     window._lastResult = { s:s, key:key, R:R };
+
+    submitRecord(s, R);
   }
 
   /* ==================== 事件 ==================== */
   $("startBtn").addEventListener("click", function(){
+    const v = $("nameInput").value;
+    if(!cleanName(v)){
+      $("nameInput").classList.add("err");
+      $("nameInput").focus();
+      $("nameTip").textContent = "请先填写您的姓名，我们好把结果记在您名下。";
+      toast("请先填写姓名");
+      return;
+    }
+    $("nameInput").classList.remove("err");
+    $("nameTip").textContent = "仅用于本次工作坊的签到与回访，不会对外公开。";
+    saveName(v);
+
     idx = 0;
     answers = QUESTIONS.map(function(){ return []; });
     QUESTIONS.forEach(function(q){ delete q._order; });
@@ -710,11 +818,17 @@
     show("quiz");
   });
 
+  $("nameInput").addEventListener("input", function(){
+    this.classList.remove("err");
+    $("nameTip").textContent = "仅用于本次工作坊的签到与回访，不会对外公开。";
+  });
+
   $("resumeBtn").addEventListener("click", function(){
     const o = load();
     if(!o) return;
     answers = QUESTIONS.map(function(_,i){ return Array.isArray(o.a[i]) ? o.a[i] : []; });
     idx = Math.min(o.i || 0, QUESTIONS.length - 1);
+    if(o.n && !userName){ userName = cleanName(o.n); saveName(userName); }
     renderQuestion();
     show("quiz");
   });
@@ -742,6 +856,8 @@
     QUESTIONS.forEach(function(q){ delete q._order; });
     show("cover");
     $("resumeBtn").style.display = "none";
+    // 姓名保留在输入框里，方便同一个人重测；换人再改即可
+    $("nameInput").value = userName;
   });
 
   $("copyBtn").addEventListener("click", function(){
@@ -750,11 +866,11 @@
     const max = Math.max(L.s.yi, L.s.dao, L.s.xin, 1);
     const txt =
       "【企业家经典智慧自测 · 结果】\n\n" +
+      (userName ? "姓名：" + userName + "\n" : "") +
       "我的侧重：" + L.R.tag + "\n" +
       "易经（观势）：" + weightWord(L.s.yi, max) + "\n" +
       "道德经（知止）：" + weightWord(L.s.dao, max) + "\n" +
       "阳明心学（定心）：" + weightWord(L.s.xin, max) + "\n\n" +
-      "这一周先做一件事：" + L.R.task.replace(/<[^>]+>/g,"") + "\n\n" +
       "三学本是一体，只是先后不同。3 个月后再来看看。";
 
     if(navigator.clipboard && navigator.clipboard.writeText){
@@ -782,7 +898,9 @@
     if(o && o.a && o.a.some(function(x){ return x && x.length; })){
       $("resumeBtn").style.display = "flex";
     }
-    $("courseBtn").href = COURSE_URL;
+    // 回填上次填过的姓名，同一个人重测无需再输
+    userName = (o && o.n ? cleanName(o.n) : "") || loadName();
+    if(userName) $("nameInput").value = userName;
     if($("metaMax")) $("metaMax").textContent = MAX_PICK;
     if($("hintMax")) $("hintMax").textContent = MAX_PICK;
   })();
