@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<title>企业家经典智慧自测｜易经 · 道德经 · 阳明心学</title>
+<style>
+  :root{
+    --paper:#f6f1e7;
+    --paper-2:#efe7d8;
+    --ink:#23201c;
+    --ink-2:#57514a;
+    --ink-3:#8c8478;
+    --line:#ddd3c2;
+    --seal:#a8452c;
+    --seal-soft:#f0e0d9;
+    --yi:#2f6f5e;
+    --dao:#3a5678;
+    --xin:#a8452c;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(35,32,28,.05), 0 8px 28px -12px rgba(35,32,28,.18);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Songti SC","Source Han Serif SC","Noto Serif SC","STSong",SimSun,serif;
+    font-size:16px;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    background-image:radial-gradient(circle at 20% 0%, rgba(168,69,44,.045), transparent 45%),
+                     radial-gradient(circle at 100% 100%, rgba(47,111,94,.05), transparent 40%);
+    background-attachment:fixed;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 22px 48px;}
+  .screen{display:none;animation:fade .38s ease both;}
+  .screen.on{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+  /* ============ 封面 ============ */
+  #cover{padding-top:14vh;}
+  .brand{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12px;letter-spacing:.42em;color:var(--ink-3);
+    text-transform:uppercase;margin-bottom:34px;
+  }
+  .cover-seal{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:56px;height:56px;border-radius:8px;
+    background:var(--seal);color:#fff;
+    font-size:24px;letter-spacing:0;
+    box-shadow:0 6px 18px -6px rgba(168,69,44,.55);
+    margin-bottom:28px;
+  }
+  h1{
+    font-size:34px;line-height:1.35;margin:0 0 18px;
+    font-weight:700;letter-spacing:.02em;
+  }
+  h1 .thin{color:var(--ink-3);font-weight:400;}
+  .lede{font-size:16px;color:var(--ink-2);margin:0 0 30px;max-width:26em;}
+  .meta{
+    display:flex;gap:22px;flex-wrap:wrap;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:13px;color:var(--ink-3);
+    padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    margin-bottom:34px;
+  }
+  .meta b{color:var(--ink-2);font-weight:600;}
+  .btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;padding:16px 20px;border:none;border-radius:12px;
+    background:var(--ink);color:#fff;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:16px;font-weight:600;letter-spacing:.04em;
+    cursor:pointer;transition:transform .15s, opacity .15s;
+    box-shadow:0 10px 24px -14px rgba(35,32,28,.7);
+  }
+  .btn:active{transform:scale(.985);opacity:.92;}
+  .btn.ghost{background:transparent;color:var(--ink-2);border:1px solid var(--line);box-shadow:none;margin-top:12px;}
+  .btn.seal{background:var(--seal);box-shadow:0 10px 24px -14px rgba(168,69,44,.8);}
+  .btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+
+  /* ============ 答题 ============ */
+  .topbar{position:sticky;top:0;z-index:10;background:rgba(246,241,231,.92);backdrop-filter:blur(10px);padding:16px 0 12px;margin-bottom:8px;}
+  .progress-rail{height:3px;background:var(--line);border-radius:99px;overflow:hidden;}
+  .progress-fill{height:100%;width:0;background:var(--seal);border-radius:99px;transition:width .35s cubic-bezier(.4,0,.2,1);}
+  .step{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12px;color:var(--ink-3);margin-top:10px;letter-spacing:.08em;
+  }
+  .step b{color:var(--ink);font-weight:600;font-size:13px;}
+
+  .qwrap{padding-top:22px;}
+  .qnum{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12px;letter-spacing:.3em;color:var(--seal);font-weight:600;
+    margin-bottom:10px;
+  }
+  .qtext{font-size:23px;line-height:1.5;font-weight:700;margin:0 0 8px;letter-spacing:.01em;}
+  .qhint{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12px;color:var(--ink-3);margin-bottom:24px;
+  }
+  .opts{display:flex;flex-direction:column;gap:11px;}
+  .opt{
+    display:flex;gap:13px;align-items:flex-start;
+    padding:16px 17px;border-radius:var(--radius);
+    background:#fffdf8;border:1px solid var(--line);
+    cursor:pointer;transition:border-color .16s, background .16s, transform .12s, box-shadow .16s;
+    box-shadow:0 1px 1px rgba(35,32,28,.03);
+  }
+  .opt:active{transform:scale(.99);}
+  .opt .mark{
+    flex:0 0 20px;height:20px;margin-top:2px;border-radius:6px;
+    border:1.5px solid #cdc2ae;background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .16s;
+  }
+  .opt .mark svg{opacity:0;transform:scale(.6);transition:all .16s;}
+  .opt.sel{border-color:var(--seal);background:#fffaf6;box-shadow:0 0 0 3px rgba(168,69,44,.07), 0 8px 20px -14px rgba(168,69,44,.5);}
+  .opt.sel .mark{background:var(--seal);border-color:var(--seal);}
+  .opt.sel .mark svg{opacity:1;transform:scale(1);}
+  .opt .txt{font-size:15.5px;line-height:1.7;color:var(--ink);}
+
+  .nav{display:flex;gap:12px;margin-top:30px;}
+  .nav .btn{flex:1;}
+  .nav .btn.back{flex:0 0 96px;background:transparent;color:var(--ink-3);border:1px solid var(--line);box-shadow:none;font-weight:500;}
+
+  .toast{
+    position:fixed;left:50%;bottom:38px;transform:translate(-50%,20px);
+    background:rgba(35,32,28,.92);color:#fff;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:13.5px;padding:11px 20px;border-radius:99px;
+    opacity:0;pointer-events:none;transition:all .28s;z-index:99;white-space:nowrap;
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0);}
+
+  /* ============ 结果 ============ */
+  #result{padding-top:26px;}
+  .res-tag{
+    display:inline-block;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12px;letter-spacing:.22em;font-weight:600;
+    padding:7px 14px;border-radius:99px;
+    background:var(--seal-soft);color:var(--seal);
+    margin-bottom:20px;
+  }
+  .res-title{font-size:30px;line-height:1.4;font-weight:700;margin:0 0 10px;}
+  .res-sub{font-size:15.5px;color:var(--ink-2);margin:0 0 34px;}
+
+  .scorecard{
+    background:#fffdf8;border:1px solid var(--line);border-radius:16px;
+    padding:22px 20px;margin-bottom:32px;box-shadow:var(--shadow);
+  }
+  .sc-row{margin-bottom:16px;}
+  .sc-row:last-child{margin-bottom:0;}
+  .sc-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:13.5px;margin-bottom:8px;
+  }
+  .sc-name{color:var(--ink-2);font-weight:600;letter-spacing:.05em;}
+  .sc-name i{font-style:normal;color:var(--ink-3);font-weight:400;font-size:12px;margin-left:6px;}
+  .sc-val{font-weight:700;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums;}
+  .sc-track{height:9px;background:var(--paper-2);border-radius:99px;overflow:hidden;}
+  .sc-bar{height:100%;width:0;border-radius:99px;transition:width 1s cubic-bezier(.22,1,.36,1);}
+  .sc-row[data-k=yi] .sc-bar{background:linear-gradient(90deg,#3f8a76,var(--yi));}
+  .sc-row[data-k=dao] .sc-bar{background:linear-gradient(90deg,#4c719a,var(--dao));}
+  .sc-row[data-k=xin] .sc-bar{background:linear-gradient(90deg,#c25c40,var(--xin));}
+  .sc-note{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:11.5px;color:var(--ink-3);text-align:right;
+    margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);
+  }
+
+  .sec{margin-bottom:32px;}
+  .sec-h{
+    display:flex;align-items:center;gap:10px;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12px;letter-spacing:.24em;color:var(--ink-3);font-weight:600;
+    margin-bottom:12px;
+  }
+  .sec-h::after{content:"";flex:1;height:1px;background:var(--line);}
+  .sec p{margin:0 0 14px;font-size:16px;color:var(--ink);line-height:1.85;}
+  .sec p:last-child{margin-bottom:0;}
+  .em{background:linear-gradient(transparent 62%, rgba(168,69,44,.16) 62%);font-weight:700;}
+
+  .blind{
+    border-left:3px solid var(--seal);
+    background:#fbf6f1;border-radius:0 10px 10px 0;
+    padding:15px 18px;font-size:15px;color:var(--ink-2);line-height:1.8;
+  }
+  .blind b{color:var(--seal);}
+
+  .action{
+    background:var(--ink);color:#f6f1e7;border-radius:16px;
+    padding:24px 22px;box-shadow:0 18px 40px -24px rgba(35,32,28,.85);
+  }
+  .action .label{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:11px;letter-spacing:.28em;color:#b3a894;margin-bottom:10px;
+  }
+  .action .task{font-size:18px;font-weight:700;line-height:1.6;margin-bottom:10px;}
+  .action .why{font-size:14px;color:#c9bfae;line-height:1.8;margin:0;}
+
+  .course{
+    border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:#fffdf8;margin-bottom:26px;
+  }
+  .course-h{
+    padding:18px 20px 0;
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:11px;letter-spacing:.28em;color:var(--ink-3);font-weight:600;
+  }
+  .course-b{padding:10px 20px 20px;}
+  .course-t{font-size:19px;font-weight:700;margin:0 0 8px;}
+  .course-d{font-size:14.5px;color:var(--ink-2);line-height:1.8;margin:0;}
+  .course a.btn{margin-top:16px;display:flex;text-decoration:none;}
+
+  .footnote{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:12.5px;color:var(--ink-3);line-height:1.9;
+    border-top:1px solid var(--line);padding-top:20px;
+  }
+  .footnote b{color:var(--ink-2);}
+
+  @media (max-width:400px){
+    h1{font-size:29px;}
+    .qtext{font-size:21px;}
+    .res-title{font-size:26px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= 封面 ================= -->
+  <section id="cover" class="screen on">
+    <div class="brand">JING DIAN · 经典智慧</div>
+    <div class="cover-seal">易</div>
+    <h1>你现在最该补的，<br>是哪一门经典？</h1>
+    <p class="lede">易经看势，道德经知止，阳明心学定心。十道题，测出你当下真正的卡点在哪一层。</p>
+    <div class="meta">
+      <span><b>10</b> 道题</span>
+      <span>约 <b>3</b> 分钟</span>
+      <span><b>多选</b>，最多 <span id="metaMax">2</span> 项</span>
+    </div>
+    <button class="btn" id="startBtn">开始自测</button>
+    <button class="btn ghost" id="resumeBtn" style="display:none">继续上次作答</button>
+  </section>
+
+  <!-- ================= 答题 ================= -->
+  <section id="quiz" class="screen">
+    <div class="topbar">
+      <div class="progress-rail"><div class="progress-fill" id="pbar"></div></div>
+      <div class="step">
+        <span id="stepNum"><b>01</b> / 10</span>
+        <span id="stepTag">当下困境</span>
+      </div>
+    </div>
+    <div class="qwrap">
+      <div class="qnum" id="qnum">第一题</div>
+      <h2 class="qtext" id="qtext"></h2>
+      <div class="qhint">选出最贴合你当下真实处境的，可多选（≤<span id="hintMax">2</span>）</div>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <button class="btn back" id="backBtn">上一题</button>
+        <button class="btn" id="nextBtn">下一题</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 结果 ================= -->
+  <section id="result" class="screen">
+    <div class="res-tag" id="resTag"></div>
+    <h2 class="res-title" id="resTitle"></h2>
+    <p class="res-sub" id="resSub"></p>
+
+    <div class="scorecard">
+      <div class="sc-row" data-k="yi">
+        <div class="sc-head"><span class="sc-name">易经 <i>观势</i></span><span class="sc-val" id="vYi">0</span></div>
+        <div class="sc-track"><div class="sc-bar" id="bYi"></div></div>
+      </div>
+      <div class="sc-row" data-k="dao">
+        <div class="sc-head"><span class="sc-name">道德经 <i>知止</i></span><span class="sc-val" id="vDao">0</span></div>
+        <div class="sc-track"><div class="sc-bar" id="bDao"></div></div>
+      </div>
+      <div class="sc-row" data-k="xin">
+        <div class="sc-head"><span class="sc-name">阳明心学 <i>定心</i></span><span class="sc-val" id="vXin">0</span></div>
+        <div class="sc-track"><div class="sc-bar" id="bXin"></div></div>
+      </div>
+      <div class="sc-note">满分 <span id="maxScore">13</span> 分（前 3 题权重 ×2）</div>
+    </div>
+
+    <div class="sec" id="secProfile">
+      <div class="sec-h">你现在的局</div>
+      <div id="profileBody"></div>
+    </div>
+
+    <div class="sec" id="secBlind">
+      <div class="sec-h">容易忽略的盲区</div>
+      <div class="blind" id="blindBody"></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h">这一周，先做一件事</div>
+      <div class="action">
+        <div class="label">THIS WEEK</div>
+        <div class="task" id="taskBody"></div>
+        <p class="why" id="whyBody"></p>
+      </div>
+    </div>
+
+    <div class="course">
+      <div class="course-h">课程建议</div>
+      <div class="course-b">
+        <div class="course-t" id="courseTitle"></div>
+        <p class="course-d" id="courseBody"></p>
+        <a class="btn seal" id="courseBtn" href="#">查看课程安排</a>
+      </div>
+    </div>
+
+    <div class="footnote">
+      <b>关于这份结果</b><br>
+      分数只反映你「当下」的优先级，不是固定人格。局势、边界、本心本是一体——先补最短的那块板，其余两门随后跟上即可。<br><br>
+      建议 <b>3 个月后重测一次</b>。分数的迁移方向，往往比分数本身更能说明你在往哪里走。
+    </div>
+
+    <button class="btn ghost" id="againBtn" style="margin-top:26px">重新测一次</button>
+    <button class="btn ghost" id="copyBtn">复制文字版结果</button>
+  </section>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ==================== 配置区（改这里即可） ==================== */
+  const MAX_PICK = 2;                 // 每题最多选几项（每题仅 3 个维度，设 2 才有区分度）；改成 99 即放开
+  const WEIGHTS  = [2,2,2,1,1,1,1,1,1,1]; // 前 3 题权重 ×2
+  const BALANCED_GAP = 2;             // 最高分与最低分差 ≤ 此值 → 判定为「三者均衡」
+  const COURSE_URL = "#";             // ← 换成你的课程/落地页链接
+
+  /* ==================== 题目数据 ==================== */
+  const QUESTIONS = [
+    { tag:"当下困境", q:"你当下最主要的困扰是？", opts:[
+      {t:"业务瓶颈、看不清大势、判断时机进退、合作纠纷、同行竞争争端", d:"yi"},
+      {t:"盲目扩张、控制欲强、不懂知止、硬扛逆势、透支身体、杠杆风险", d:"dao"},
+      {t:"决策纠结、内耗焦虑、团队缺少内驱力、和伴侣 / 孩子不同频、容易指责他人", d:"xin"}
+    ]},
+    { tag:"经营难题", q:"经营上，你常常遇到哪一类难题？", opts:[
+      {t:"新项目不知道该不该上马、客户流失、现金流危机、局势突变难以预判", d:"yi"},
+      {t:"规模越做越大利润变薄、行情好时贪心加码、喜欢硬碰硬打价格战", d:"dao"},
+      {t:"赚到钱之后迷茫，找不到做企业的初心，诱惑多，分不清机会是陷阱还是机遇", d:"xin"}
+    ]},
+    { tag:"带团队", q:"带团队的时候，最让你头疼的是？", opts:[
+      {t:"人心涣散、目标不一致、骨干一意孤行、听不进劝谏", d:"yi"},
+      {t:"凡事亲力亲为、不放权、制度管控太严，团队压抑缺少活力", d:"dao"},
+      {t:"员工躺平，只靠奖金驱动；遇到问题习惯指责下属，事后又愧疚", d:"xin"}
+    ]},
+    { tag:"个人状态", q:"个人层面，你常常陷入哪种状态？", opts:[
+      {t:"局势变化快，不知道当下是该进、该守、该退", d:"yi"},
+      {t:"好胜心强，事事要强，总觉得停下来就是退步，长期透支自己", d:"dao"},
+      {t:"容易攀比同行，看到别人发展好就心慌，做完决定反复摇摆后悔", d:"xin"}
+    ]},
+    { tag:"家庭关系", q:"在家庭关系里，你的困扰偏向？", opts:[
+      {t:"事业和陪伴家人两难取舍，不知道当下阶段重心放在哪里", d:"yi"},
+      {t:"习惯安排、掌控家人选择，比如催婚、规划孩子道路，越控制越对抗", d:"dao"},
+      {t:"忙于事业，内心愧疚，一边放不下工作一边自责，和伴侣沟通对立", d:"xin"}
+    ]},
+    { tag:"遇挫反应", q:"遇到失败、事情不顺的时候，你的第一反应常常是？", opts:[
+      {t:"外部环境、市场、合作方出了问题，局面条件不利", d:"yi"},
+      {t:"不甘心认输，逆势硬撑，总想再投入资源赌一把翻盘", d:"dao"},
+      {t:"向外甩锅，很少向内自省，事情结束之后心里不安", d:"xin"}
+    ]},
+    { tag:"决策卡点", q:"在做重大决策的时候，你的卡点是？", opts:[
+      {t:"看不清阶段，不知道时机是否合适，风险会在哪个环节爆发", d:"yi"},
+      {t:"总想抓住所有机会，什么都不想放弃，舍不得收缩战线", d:"dao"},
+      {t:"多方意见冲突，利弊算不清，不知道以什么标准来定取舍", d:"xin"}
+    ]},
+    { tag:"周期变化", q:"面对周期变化、行业红利消退，你的困扰是？", opts:[
+      {t:"分不清是短期困难，还是大势转向，不知道怎么布局预案", d:"yi"},
+      {t:"不愿意接受盛衰规律，总想维持过去的增长，不愿止损", d:"dao"},
+      {t:"市场变化带来巨大焦虑，情绪跟着行情起伏不定", d:"xin"}
+    ]},
+    { tag:"合作关系", q:"和合伙人、上下游打交道，容易出现的麻烦是？", opts:[
+      {t:"契约变动、伙伴失信、利益争执、商务纠纷、有人暗中博弈", d:"yi"},
+      {t:"一味追求规模，不断拓展合作，不懂得筛选、守住边界", d:"dao"},
+      {t:"合作当中发心摇摆，容易在利益面前动摇底线", d:"xin"}
+    ]},
+    { tag:"复盘提升", q:"复盘的时候，你最想提升哪一块能力？", opts:[
+      {t:"观势辨象，看懂局势变化，把握时位，趋吉避凶", d:"yi"},
+      {t:"懂得取舍知止，理解长久之道，不妄为、不强求", d:"dao"},
+      {t:"致良知，稳住本心，减少内耗，做到知行合一", d:"xin"}
+    ]}
+  ];
+
+  /* ==================== 结果文案 ==================== */
+  const CN_NUM = ["一","二","三","四","五","六","七","八","九","十"];
+
+  const RESULTS = {
+    "yi": {
+      tag:"观势者",
+      title:"优先补《易经》：<br>先把局势看清",
+      sub:"你的卡点不在心上，也不在欲望上，而在判断——看不清大势，分不清进退。",
+      profile:[
+        "你有行动力，也不缺胆识，真正让你付出代价的是<span class='em'>看错阶段</span>。该起势的时候犹豫，该收势的时候加码，等到局面明朗，代价已经付完了。",
+        "你的困扰高度集中在外部：业务瓶颈、合作纠纷、同行竞争、时机判断。这些都不是「心态问题」，靠修心解决不了，靠躺平更解决不了。",
+        "你需要的是<span class='em'>一套看局面的坐标系</span>——知道自己在哪个卦、哪个阶段，知道这一步是进、是守，还是止。"
+      ],
+      blind:"你容易把「判断失误」包装成「运气不好」，也容易在局势不明时用加倍努力来掩盖方向错误。方向错了，努力越猛，亏损越快。",
+      task:"拿一张纸，写下你手上最重要的 3 个决策，每个只标一个问题：<b>它现在处在「起势、鼎盛、转折、收势」的哪一段？</b>",
+      why:"标不出来，就说明你是在凭感觉决策。这一周不必做新动作，先把这 3 个位置标清楚——很多错误，标完就自己消失了。",
+      courseTitle:"《易经与企业哲学》",
+      courseBody:"从「与时偕行」建立底层判断力：用卦象读懂经营、团队、合作的局面，学会识别阶段、把握时位、趋吉避凶。后续再配道德经学边界取舍，用阳明心学安顿内心。"
+    },
+    "dao": {
+      tag:"知止者",
+      title:"优先补《道德经》：<br>先学会停下来",
+      sub:"你的问题不是看不懂机会，是很难管住自己扩张和掌控的欲望。",
+      profile:[
+        "能力强、干劲足，习惯要强，凡事想抓住更多。你不是不知道该收，是<span class='em'>收不住</span>——行情好时加码，逆势时硬扛，总觉得停下来就是退步。",
+        "你的困扰集中在「过度」：盲目扩张、亲力亲为、管控太严、透支身体、杠杆风险。这些都不是能力问题，是<span class='em'>边界问题</span>。",
+        "你需要的是「知止」：读懂盛衰循环，理解柔弱胜刚强，知道什么时候该收战线、放权、守住根基。"
+      ],
+      blind:"你把「不停」当成「进取」，把「收缩」当成「失败」。但盛衰有常，逆势加码从来不是勇气，是把过去的成果一次性押上去。",
+      task:"挑一件你正在<b>硬扛</b>的事——一个不赚钱还在追加投入的项目，或一个你始终不肯放的权——这一周主动砍掉 20%。",
+      why:"砍 20% 不会让你垮，但会让你第一次体验「不做」也能活。知止不是躺平，是把资源从低效处撤回来，投到真正的地基上。",
+      courseTitle:"《道德经》与企业长久之道",
+      courseBody:"读懂盛衰循环、柔弱胜刚强、知止不殆。学会收战线、放权、守住根基；看懂「无为」不是不作为，而是不妄为。之后再用易经判断大势，以阳明心学校准发心。"
+    },
+    "xin": {
+      tag:"修心者",
+      title:"优先补阳明心学：<br>先把心安下来",
+      sub:"外部机会和局势你大致看得明白，卡住你的是内耗、摇摆和情绪。",
+      profile:[
+        "你不缺判断力，也不缺资源。真正消耗你的，是<span class='em'>心里没有一把稳定的尺</span>——决策反复，情绪跟着行情走，带团队、回家都容易被带走。",
+        "你的困扰向内：内耗焦虑、攀比心慌、决策摇摆、容易指责他人又事后愧疚。这些不是「外部条件不好」能解释的。",
+        "你需要的是「致良知」：在事上磨，建立内在的决策标尺，让心定下来。心定了，同样的局面，你会做出完全不同的选择。"
+      ],
+      blind:"你习惯把「心不定」归因于「事情太多、压力太大」。但压力从来不会消失，能改变的只有你面对压力时的那个「定」。向外找原因，永远找不到答案。",
+      task:"选一个你最近<b>最想指责</b>的人，先别开口——写下他的三个合理之处，再决定要不要说。",
+      why:"这一步不是让你认输，是让你从「情绪反应」切换到「良知判断」。做到一次，你会发现很多冲突根本不需要发生。",
+      courseTitle:"《传习录》与阳明心学",
+      courseBody:"修炼致良知、知行合一，建立内在的决策标尺，化解内耗、安顿人心。心定之后，再学易经观势、道德经守长久，内外贯通。"
+    },
+    "yi+dao": {
+      tag:"观势 · 知止",
+      title:"两门并行：<br>先看势，再学止",
+      sub:"你既要看清局势，也要学会克制取舍——判断和边界，是你当下同一件事的两面。",
+      profile:[
+        "你既会看错阶段，也会在该收的时候加码。<span class='em'>看得清大势，但管不住手</span>——这是很多企业家的真实状态。",
+        "易经帮你判断「现在是什么局、该进该守」，道德经帮你判断「这个局里，我该拿多少、放多少」。两者是一套完整的进退逻辑。",
+        "建议先读易经，建立时位坐标；再读道德经，给这套坐标装上刹车。顺序反了，容易变成「懂得越多，越不敢动」。"
+      ],
+      blind:"最大的风险是「看懂了却不行动」——局势判断得头头是道，该收缩的时候还在等更好的时机。知而不行，等于不知。",
+      task:"给你最重要的那个决策，同时写两句话：<b>「现在是什么阶段」和「我最多愿意投入多少」。</b>两句都写不出，就先别动。",
+      why:"一句管进，一句管出。企业家的重大失误，几乎都是这两句里缺了一句。",
+      courseTitle:"《易经与企业哲学》＋《道德经》",
+      courseBody:"先以易经建立「与时偕行」的时位判断，再用道德经读懂盛衰循环与知止不殆。一的进，一的止，构成完整的进退之道。"
+    },
+    "dao+xin": {
+      tag:"知止 · 定心",
+      title:"两门并行：<br>一边克制，一边定心",
+      sub:"你既要管住扩张的欲望，也要建立内在的标尺——这两件事，其实是同一件。",
+      profile:[
+        "你容易过度用力，也容易情绪起伏。<span class='em'>向外想抓住更多，向内又稳不住</span>，两头都在消耗。",
+        "道德经治「过度」：教你在该收的时候收，该放的时候放；阳明心学治「不定」：教你用良知做判断，而不是用情绪做判断。",
+        "两者同修，效果会互相放大——心定了，才真的放得下；放下了，心才真的定得下来。"
+      ],
+      blind:"你可能会用「修心」来回避真正的取舍，也可能用「果断收缩」来掩盖内心的不安。两条路都会绕回原点：不敢面对的，始终要面对。",
+      task:"这一周做一次「双清单」：左边写<b>我要放下的三件事</b>，右边写<b>我做这些决定时的真实动机</b>。对照着看。",
+      why:"放不下，往往不是因为那件事多重要，而是因为心里有个洞。看清动机，取舍才会真的发生。",
+      courseTitle:"《道德经》＋《传习录》",
+      courseBody:"以道德经学知止、守边界、不妄为；以阳明心学致良知、稳本心、知行合一。一外一内，同时松绑。"
+    },
+    "yi+xin": {
+      tag:"观势 · 修心",
+      title:"两门并行：<br>看懂局势，也稳住自己",
+      sub:"你能看清局面，却容易被局面牵动情绪——观势与修心，要同步进行。",
+      profile:[
+        "你的判断力是够的，问题在于<span class='em'>看清了反而更焦虑</span>。局势一变，心就跟着晃，决策也跟着摇摆。",
+        "易经帮你把「不确定」变成「可判断的阶段」，减少无谓的恐慌；阳明心学帮你在判断之后稳住，不被情绪推翻已经想清楚的事。",
+        "顺序上建议先易经后阳明：先有坐标，再谈定心。没有坐标的「定」，容易变成逃避。"
+      ],
+      blind:"你可能会用「分析局势」来缓解焦虑，结果分析越多越焦虑——因为真正让你不安的不是信息不足，是心里没有可以依靠的准则。",
+      task:"复盘最近一次让你失眠的决策：<b>写下当时你真正害怕的是什么。</b>然后问自己：这个害怕，是事实，还是想象？",
+      why:"局势带来的恐惧，十次里有七次是想象。把想象和事实分开，是观势和修心共同的第一步。",
+      courseTitle:"《易经与企业哲学》＋《传习录》",
+      courseBody:"先用易经建立时位坐标，看懂局势的阶段与进退；再用阳明心学致良知、稳本心，让判断不被情绪推翻。"
+    },
+    "balanced": {
+      tag:"三学并进",
+      title:"三门系统连读：<br>势、道、心，本是一体",
+      sub:"你已经感受到：局势、边界、本心，是同一个问题的三个面。单补一门，都不够。",
+      profile:[
+        "你的分数分布均衡，说明困扰不是单点的——既有看不清局势的时候，也有管不住扩张的时候，还有心不定的时候。",
+        "这不是「问题太多」，而是你已经走到了需要<span class='em'>系统重建认知框架</span>的阶段。零散地学，只会越学越乱。",
+        "建议按次第连读：易经（观势）→ 道德经（守道）→ 阳明心学（修心）。先有坐标，再有边界，最后有定力。"
+      ],
+      blind:"均衡最大的陷阱是「什么都想学，什么都没学透」。三门同时开工，很容易变成知识收藏，而不是能力改变。请务必按顺序来。",
+      task:"这一周只做一件事：<b>把这三门课的学习顺序写下来，标上开始日期。</b>然后只开始第一门。",
+      why:"系统学习的关键不是全，是次第。顺序对了，后一门会自然长在前一门上；顺序乱了，三门互相打架。",
+      courseTitle:"易经 → 道德经 → 阳明心学（整套次第）",
+      courseBody:"按「观势 → 守道 → 修心」的次第系统打通：先建立时位判断，再学会边界取舍，最后安顿内心。三门融会贯通，形成一套完整的企业家决策心法。"
+    }
+  };
+
+  /* ==================== 状态 ==================== */
+  const STORE_KEY = "jingdian_quiz_v1";
+  let idx = 0;
+  let answers = QUESTIONS.map(function(){ return []; }); // 每题存维度数组
+  let order = [];  // 当前题的选项渲染顺序
+
+  const $ = function(id){ return document.getElementById(id); };
+  const screens = { cover:$("cover"), quiz:$("quiz"), result:$("result") };
+
+  function show(name){
+    Object.keys(screens).forEach(function(k){ screens[k].classList.remove("on"); });
+    screens[name].classList.add("on");
+    window.scrollTo(0, 0);
+  }
+
+  let toastTimer = null;
+  function toast(msg){
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove("on"); }, 1900);
+  }
+
+  /* ==================== 答题渲染 ==================== */
+  /* 固定种子洗牌：打乱选项以削弱「A=易经」的规律感，
+     但顺序必须可复现——否则 3 个月后复测同一份答案会算出不同分数，
+     分数的迁移就分不清是人心变了还是题目顺序变了。 */
+  function makeRandom(seed){
+    let s = seed >>> 0;
+    return function(){
+      s = (s * 1664525 + 1013904223) >>> 0;
+      return s / 4294967296;
+    };
+  }
+
+  function shuffle(arr, seed){
+    const a = arr.slice();
+    const rnd = makeRandom(seed || 1);
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(rnd()*(i+1));
+      const t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function renderQuestion(){
+    const q = QUESTIONS[idx];
+    $("qnum").textContent = "第" + CN_NUM[idx] + "题";
+    $("qtext").textContent = q.q;
+    $("stepNum").innerHTML = "<b>" + String(idx+1).padStart(2,"0") + "</b> / 10";
+    $("stepTag").textContent = q.tag;
+    $("pbar").style.width = ((idx)/QUESTIONS.length*100) + "%";
+
+    // 选项顺序：固定种子打乱后固化，来回切换不跳，复测也完全一致
+    if(!q._order){ q._order = shuffle(q.opts.map(function(_,i){ return i; }), 7919 * (idx+1)); }
+    const box = $("opts");
+    box.innerHTML = "";
+    q._order.forEach(function(origIdx){
+      const o = q.opts[origIdx];
+      const sel = answers[idx].indexOf(o.d) > -1;
+      const div = document.createElement("div");
+      div.className = "opt" + (sel ? " sel" : "");
+      div.innerHTML =
+        '<div class="mark"><svg width="12" height="12" viewBox="0 0 12 12" fill="none">' +
+        '<path d="M2 6.2L4.6 8.8L10 3.4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+        '<div class="txt">' + o.t + '</div>';
+      div.addEventListener("click", function(){ toggle(origIdx, div); });
+      box.appendChild(div);
+    });
+
+    $("backBtn").style.visibility = idx === 0 ? "hidden" : "visible";
+    $("nextBtn").textContent = idx === QUESTIONS.length - 1 ? "看结果" : "下一题";
+    $("nextBtn").disabled = answers[idx].length === 0;
+  }
+
+  function toggle(origIdx, el){
+    const d = QUESTIONS[idx].opts[origIdx].d;
+    const cur = answers[idx];
+    const pos = cur.indexOf(d);
+    if(pos > -1){
+      cur.splice(pos,1);
+      el.classList.remove("sel");
+    } else {
+      if(cur.length >= MAX_PICK){
+        toast("最多选 " + MAX_PICK + " 项，请先取消一项");
+        return;
+      }
+      cur.push(d);
+      el.classList.add("sel");
+    }
+    $("nextBtn").disabled = cur.length === 0;
+    save();
+  }
+
+  function save(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify({ a:answers, i:idx })); }catch(e){}
+  }
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORE_KEY);
+      if(!raw) return null;
+      const o = JSON.parse(raw);
+      if(!o || !Array.isArray(o.a)) return null;
+      return o;
+    }catch(e){ return null; }
+  }
+  function clearSave(){
+    try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  }
+
+  /* ==================== 计分 ==================== */
+  function compute(){
+    const s = { yi:0, dao:0, xin:0 };
+    answers.forEach(function(list, i){
+      const w = WEIGHTS[i] || 1;
+      list.forEach(function(d){ if(s[d] !== undefined) s[d] += w; });
+    });
+    return s;
+  }
+
+  function decide(s){
+    const arr = [["yi",s.yi],["dao",s.dao],["xin",s.xin]].sort(function(a,b){ return b[1]-a[1]; });
+    // 三类同分 → 系统连读
+    if(arr[0][1] === arr[1][1] && arr[1][1] === arr[2][1]) return "balanced";
+    // 并列最高优先于「接近」：两项打平、第三项哪怕只差 2 分，也该判为两项并行
+    if(arr[0][1] === arr[1][1]) return [arr[0][0], arr[1][0]].sort().join("+");
+    // 无并列且三者差距都在阈值内 → 系统连读
+    if(arr[0][1] - arr[2][1] <= BALANCED_GAP) return "balanced";
+    return arr[0][0];
+  }
+
+  /* 让 key 与 RESULTS 对齐：yi+dao / dao+xin / yi+xin */
+  function normalizeKey(k){
+    if(k === "yi+dao" || k === "dao+yi") return "yi+dao";
+    if(k === "dao+xin" || k === "xin+dao") return "dao+xin";
+    if(k === "yi+xin" || k === "xin+yi") return "yi+xin";
+    return k;
+  }
+
+  /* ==================== 结果渲染 ==================== */
+  function renderResult(){
+    const s = compute();
+    const key = normalizeKey(decide(s));
+    const R = RESULTS[key] || RESULTS.balanced;
+
+    $("resTag").textContent = R.tag;
+    $("resTitle").innerHTML = R.title;
+    $("resSub").textContent = R.sub;
+
+    $("profileBody").innerHTML = R.profile.map(function(p){ return "<p>" + p + "</p>"; }).join("");
+    $("blindBody").innerHTML = R.blind;
+    $("taskBody").innerHTML = R.task;
+    $("whyBody").innerHTML = R.why;
+    $("courseTitle").textContent = R.courseTitle;
+    $("courseBody").textContent = R.courseBody;
+    $("courseBtn").href = COURSE_URL;
+
+    // 分数条：以最高分为 100%
+    const max = Math.max(s.yi, s.dao, s.xin, 1);
+    $("vYi").textContent = s.yi;
+    $("vDao").textContent = s.dao;
+    $("vXin").textContent = s.xin;
+
+    show("result");
+    requestAnimationFrame(function(){
+      setTimeout(function(){
+        $("bYi").style.width  = (s.yi  / max * 100) + "%";
+        $("bDao").style.width = (s.dao / max * 100) + "%";
+        $("bXin").style.width = (s.xin / max * 100) + "%";
+      }, 120);
+    });
+
+    window._lastResult = { s:s, key:key, R:R };
+  }
+
+  /* ==================== 事件 ==================== */
+  $("startBtn").addEventListener("click", function(){
+    idx = 0;
+    answers = QUESTIONS.map(function(){ return []; });
+    QUESTIONS.forEach(function(q){ delete q._order; });
+    clearSave();
+    renderQuestion();
+    show("quiz");
+  });
+
+  $("resumeBtn").addEventListener("click", function(){
+    const o = load();
+    if(!o) return;
+    answers = QUESTIONS.map(function(_,i){ return Array.isArray(o.a[i]) ? o.a[i] : []; });
+    idx = Math.min(o.i || 0, QUESTIONS.length - 1);
+    renderQuestion();
+    show("quiz");
+  });
+
+  $("backBtn").addEventListener("click", function(){
+    if(idx === 0) return;
+    idx--; renderQuestion(); save();
+  });
+
+  $("nextBtn").addEventListener("click", function(){
+    if(answers[idx].length === 0){ toast("请至少选择一项"); return; }
+    if(idx === QUESTIONS.length - 1){
+      $("pbar").style.width = "100%";
+      save();
+      renderResult();
+      return;
+    }
+    idx++; renderQuestion(); save();
+  });
+
+  $("againBtn").addEventListener("click", function(){
+    clearSave();
+    idx = 0;
+    answers = QUESTIONS.map(function(){ return []; });
+    QUESTIONS.forEach(function(q){ delete q._order; });
+    show("cover");
+    $("resumeBtn").style.display = "none";
+  });
+
+  $("copyBtn").addEventListener("click", function(){
+    const L = window._lastResult;
+    if(!L) return;
+    const txt =
+      "【企业家经典智慧自测 · 结果】\n\n" +
+      "标签：" + L.R.tag + "\n" +
+      "易经（观势）：" + L.s.yi + " 分\n" +
+      "道德经（知止）：" + L.s.dao + " 分\n" +
+      "阳明心学（定心）：" + L.s.xin + " 分\n\n" +
+      "本周动作：" + L.R.task.replace(/<[^>]+>/g,"") + "\n\n" +
+      "—— 3 个月后建议重测一次。";
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){ toast("已复制到剪贴板"); },
+        function(){ fallbackCopy(txt); });
+    } else {
+      fallbackCopy(txt);
+    }
+  });
+
+  function fallbackCopy(txt){
+    const ta = document.createElement("textarea");
+    ta.value = txt;
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand("copy"); toast("已复制到剪贴板"); }
+    catch(e){ toast("复制失败，请手动选择"); }
+    document.body.removeChild(ta);
+  }
+
+  /* ==================== 启动检查 ==================== */
+  (function init(){
+    const o = load();
+    if(o && o.a && o.a.some(function(x){ return x && x.length; })){
+      $("resumeBtn").style.display = "flex";
+    }
+    $("courseBtn").href = COURSE_URL;
+    if($("metaMax")) $("metaMax").textContent = MAX_PICK;
+    if($("hintMax")) $("hintMax").textContent = MAX_PICK;
+    if($("maxScore")) $("maxScore").textContent = WEIGHTS.reduce(function(a,b){ return a+b; }, 0);
+  })();
+
+})();
+</script>
+</body>
+</html>
