@@ -6,7 +6,7 @@
     python make_poster.py <扫码跳转网址> [输出文件名]
 
 例：
-    python make_poster.py https://zhaodonglin1111.github.io/quiz/
+    python make_poster.py https://zhaodonglin1111.github.io/jingdian-quiz/
     python make_poster.py https://xxx.com/quiz/ 海报_正式版.png
 
 换网址后重跑即可，二维码和海报同时重出。
