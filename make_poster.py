@@ -183,12 +183,12 @@ def build(url, out_path, brand="经典智慧研习", sub_brand="企业家经典�
     d.line([(W // 2 - 46, y + 52), (W // 2 + 46, y + 52)], fill=LINE, width=2)
 
     # ---------- 印章 ----------
-    draw_seal(img, W // 2, 258, 108, "易")
+    draw_seal(img, W // 2, 258, 108, "经")
 
     # ---------- 主标题 ----------
     f_title = font(FONT_SERIF, 82)
-    t1 = "你现在最该补的，"
-    t2 = "是哪一门经典？"
+    t1 = "此刻的你，"
+    t2 = "更适合从哪一门入？"
     draw_centered(d, 372, t1, f_title, INK, spacing=3)
     draw_centered(d, 480, t2, f_title, INK, spacing=3)
 
@@ -220,10 +220,10 @@ def build(url, out_path, brand="经典智慧研习", sub_brand="企业家经典�
 
     # ---------- 核心钩子文案 ----------
     f_hook = font(FONT_SERIF, 42)
-    draw_centered(d, 940, "十个问题，看清你卡在哪一层", f_hook, INK, spacing=2)
+    draw_centered(d, 940, "十个问题，看清当下先着力哪一层", f_hook, INK, spacing=2)
 
     f_hook2 = font(FONT_SERIF, 34)
-    draw_centered(d, 1016, "局势 · 边界 · 本心，哪一块是你当下的短板？", f_hook2, INK_2, spacing=1)
+    draw_centered(d, 1016, "局势 · 边界 · 本心，哪一处此刻更值得多花些心思？", f_hook2, INK_2, spacing=1)
 
     # ---------- 元信息 ----------
     f_meta = font(FONT_SANS, 27)
